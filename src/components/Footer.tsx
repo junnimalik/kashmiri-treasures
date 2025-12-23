@@ -3,17 +3,14 @@ import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin } from "luci
 
 const Footer = () => {
   const footerLinks = {
-    "Royal Pashmina": [
-      { name: "Pashmina Shawls", href: "#" },
-      { name: "Pherans", href: "#" },
-      { name: "Handbags", href: "#" },
-      { name: "Accessories", href: "#" },
+    "Fashion": [
+      { name: "Pashmina Shawls", href: "/shawls" },
+      { name: "Pherans", href: "/pherans" },
+      { name: "Handbags", href: "/handbags" },
     ],
-    "Nut Bazaar": [
-      { name: "Dry Fruits", href: "#" },
-      { name: "Saffron", href: "#" },
-      { name: "Gift Hampers", href: "#" },
-      { name: "Organic Range", href: "#" },
+    "Food & Gifts": [
+      { name: "Dry Fruits", href: "/dry-fruits" },
+      { name: "Gift Hampers", href: "/gift-hampers" },
     ],
     "Customer Care": [
       { name: "Track Order", href: "#" },
@@ -22,9 +19,8 @@ const Footer = () => {
       { name: "FAQs", href: "#" },
     ],
     Company: [
-      { name: "About Us", href: "#" },
-      { name: "Our Artisans", href: "#" },
-      { name: "Sustainability", href: "#" },
+      { name: "About Us", href: "/about" },
+      { name: "Our Artisans", href: "/about" },
       { name: "Contact Us", href: "#" },
     ],
   };
@@ -43,11 +39,11 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
-              <span className="font-serif text-3xl font-semibold text-primary-foreground">
-                Kashmir
+              <span className="font-serif text-2xl font-semibold text-primary-foreground leading-tight block">
+                Royal Pashmina
               </span>
-              <span className="block text-xs tracking-[0.3em] text-primary-foreground/60 uppercase mt-1">
-                Heritage
+              <span className="block text-xs tracking-[0.2em] text-primary-foreground/60 uppercase mt-1">
+                and Nut Bazaar
               </span>
             </Link>
             <p className="text-primary-foreground/70 leading-relaxed mb-6 max-w-sm">
@@ -97,7 +93,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-primary-foreground/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-primary-foreground/60 text-sm">
-            © {new Date().getFullYear()} Kashmir Heritage. All rights reserved.
+            © {new Date().getFullYear()} Royal Pashmina and Nut Bazaar. All rights reserved.
           </p>
 
           {/* Social Links */}

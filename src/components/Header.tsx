@@ -1,16 +1,36 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Search, Heart, ShoppingBag } from "lucide-react";
+import { Menu, X, Search, Heart, ShoppingBag, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "Royal Pashmina", href: "#pashmina" },
-    { name: "Nut Bazaar", href: "#nutbazaar" },
-    { name: "Collections", href: "#collections" },
-    { name: "Our Story", href: "#story" },
+    { 
+      name: "Shawls", 
+      href: "/shawls",
+    },
+    { 
+      name: "Pherans", 
+      href: "/pherans",
+    },
+    { 
+      name: "Handbags", 
+      href: "/handbags",
+    },
+    { 
+      name: "Dry Fruits", 
+      href: "/dry-fruits",
+    },
+    { 
+      name: "Gift Hampers", 
+      href: "/gift-hampers",
+    },
+    { 
+      name: "Our Story", 
+      href: "/about",
+    },
   ];
 
   return (
@@ -19,24 +39,24 @@ const Header = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex flex-col items-start">
-            <span className="font-serif text-2xl font-semibold text-foreground tracking-wide">
-              Kashmir
+            <span className="font-serif text-xl md:text-2xl font-semibold text-foreground tracking-wide leading-tight">
+              Royal Pashmina
             </span>
-            <span className="text-xs tracking-[0.3em] text-muted-foreground uppercase">
-              Heritage
+            <span className="text-[10px] md:text-xs tracking-[0.2em] text-muted-foreground uppercase">
+              and Nut Bazaar
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors link-underline"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -74,14 +94,14 @@ const Header = () => {
           <div className="lg:hidden py-4 border-t border-border/50 animate-fade-in">
             <nav className="flex flex-col gap-4">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
+                  to={link.href}
                   className="text-lg font-medium text-foreground/80 hover:text-foreground transition-colors py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
