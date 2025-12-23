@@ -38,13 +38,33 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex flex-col items-start">
-            <span className="font-serif text-xl md:text-2xl font-semibold text-foreground tracking-wide leading-tight">
-              Royal Pashmina
-            </span>
-            <span className="text-[10px] md:text-xs tracking-[0.2em] text-muted-foreground uppercase">
-              and Nut Bazaar
-            </span>
+          <Link to="/" className="flex items-center gap-3 group">
+            {/* Real Chinar Leaf Image */}
+            <div className="relative">
+              {/* Note: Add chinar-leaf.png to src/assets/ folder */}
+              <img 
+                src="/chinar-leaf.png" 
+                alt="Chinar Leaf"
+                className="w-12 h-12 md:w-14 md:h-14 object-contain drop-shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 brightness-100 group-hover:brightness-110"
+                onError={(e) => {
+                  // Fallback if image not found
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              
+              {/* Autumn glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-400/30 via-amber-500/20 to-red-500/30 rounded-full blur-2xl -z-10 group-hover:from-orange-500/50 group-hover:via-amber-600/30 group-hover:to-red-600/50 transition-all duration-500"></div>
+            </div>
+            
+            {/* Text */}
+            <div className="flex flex-col items-start">
+              <span className="font-serif text-xl md:text-2xl font-bold text-foreground tracking-wide leading-tight bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent group-hover:from-accent group-hover:via-primary group-hover:to-accent transition-all duration-300">
+                Royal Pashmina
+              </span>
+              <span className="text-[10px] md:text-xs tracking-[0.25em] text-muted-foreground uppercase font-medium">
+                <span className="inline-block border-l-2 border-accent pl-2">and Nut Bazaar</span>
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

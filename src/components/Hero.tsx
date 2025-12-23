@@ -34,12 +34,16 @@ const Hero = () => {
             generations of artisan mastery.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-            <Button variant="hero" size="xl" asChild>
-              <Link to="/shawls">Shop Royal Pashmina</Link>
-            </Button>
-            <Button variant="olive" size="xl" asChild>
-              <Link to="/dry-fruits">Shop Nut Bazaar</Link>
+          <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+            <Button 
+              variant="hero" 
+              size="xl" 
+              className="text-lg px-8 py-6"
+              onClick={() => {
+                window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' });
+              }}
+            >
+              Explore Products
             </Button>
           </div>
 
