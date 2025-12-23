@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-kashmir.jpg";
 
 const Hero = () => {
@@ -35,10 +36,10 @@ const Hero = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
             <Button variant="hero" size="xl" asChild>
-              <a href="#pashmina">Shop Royal Pashmina</a>
+              <Link to="/shawls">Shop Royal Pashmina</Link>
             </Button>
             <Button variant="olive" size="xl" asChild>
-              <a href="#nutbazaar">Shop Nut Bazaar</a>
+              <Link to="/dry-fruits">Shop Nut Bazaar</Link>
             </Button>
           </div>
 
