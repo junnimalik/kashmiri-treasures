@@ -1,3 +1,34 @@
+# Kashmiri Treasures - E-Commerce Website
+
+A beautiful e-commerce website showcasing authentic Kashmiri products including Pashmina shawls, Pherans, Dry Fruits, Handbags, and Gift Hampers.
+
+## 🎨 Features
+
+- **Responsive Design** - Works perfectly on all devices
+- **Automatic Image Loading** - Just drop images in folders, no coding needed!
+- **Modern UI** - Built with React, TypeScript, and Tailwind CSS
+- **Product Categories**: Shawls, Pherans, Handbags, Dry Fruits, Gift Hampers
+- **Beautiful Animations** - Smooth transitions and hover effects
+
+## 📸 Adding Product Images (No Coding Required!)
+
+**Simple 3-Step Process:**
+
+1. Navigate to `src/assets/[category-folder]/`
+2. Drop your images (`.jpg`, `.png`, or `.webp`)
+3. Refresh your browser - Done!
+
+### Product Folders:
+- `src/assets/shawls/` - Shawl & Pashmina products
+- `src/assets/pherans/` - Traditional Pherans  
+- `src/assets/handbags/` - Handbags & Accessories
+- `src/assets/dry-fruits/` - Dry Fruits & Nuts
+- `src/assets/gift-hampers/` - Gift Hamper Collections
+
+📖 **Detailed Guide**: See `IMAGE_SYSTEM_GUIDE.md` for complete instructions.
+
+---
+
 # Welcome to your Lovable project
 
 ## Project info
