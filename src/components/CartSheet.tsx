@@ -95,8 +95,8 @@ const CartSheet = () => {
               </div>
 
               <SheetFooter className="flex flex-col gap-2">
-                <Button variant="hero" className="w-full" size="lg">
-                  Proceed to Checkout
+                <Button variant="hero" className="w-full" size="lg" asChild onClick={() => setIsOpen(false)}>
+                  <Link to="/checkout">Proceed to Checkout</Link>
                 </Button>
                 <Button 
                   variant="outline" 
