@@ -8,8 +8,8 @@ const dryFruitImages = import.meta.glob('@/assets/dry-fruits/*.{jpg,jpeg,png,web
 const giftHamperImages = import.meta.glob('@/assets/gift-hampers/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, import: 'default' });
 
 // Helper function to convert glob results to array of URLs
-const globToArray = (globResult: Record<string, string>): string[] => {
-  return Object.values(globResult);
+const globToArray = (globResult: Record<string, unknown>): string[] => {
+  return Object.values(globResult).filter((val): val is string => typeof val === 'string');
 };
 
 export const getProductImages = (category: 'shawls' | 'pherans' | 'handbags' | 'dry-fruits' | 'gift-hampers'): string[] => {
