@@ -14,6 +14,7 @@ import DryFruits from "./pages/DryFruits";
 import GiftHampers from "./pages/GiftHampers";
 import About from "./pages/About";
 import ProductDetail from "./pages/ProductDetail";
+import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,12 +22,12 @@ const queryClient = new QueryClient();
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <CartSheet />
-          <BrowserRouter>
+      <BrowserRouter>
+        <CartProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <CartSheet />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/shawls" element={<Shawls />} />
@@ -36,12 +37,13 @@ const App = () => (
               <Route path="/gift-hampers" element={<GiftHampers />} />
               <Route path="/about" element={<About />} />
               <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/checkout" element={<Checkout />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </CartProvider>
+          </TooltipProvider>
+        </CartProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   </HelmetProvider>
 );
