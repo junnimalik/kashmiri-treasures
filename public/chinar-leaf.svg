@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Gradient for autumn colors -->
+  <defs>
+    <linearGradient id="leafGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#F59E0B;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#F97316;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DC2626;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Chinar Leaf Shape -->
+  <path d="M50 90 
+           L48 82 Q47 77 45 72 L44 67 Q43 65 42 62
+           C41 61 39 59 36 57 Q32 55 29 54 L24 52 Q21 51 19 50 
+           C18 48 17 46 16 44 Q15 41 16 38 C17 35 19 33 22 32 
+           L27 30 Q30 29 32 28 C33 28 34 27 35 26
+           Q34 24 33 21 L32 16 Q31 12 31 10 C30 7 31 5 32 3 
+           Q34 1 36 1 C39 0 41 1 42 3 L46 9 Q48 12 49 16
+           C49 14 50 12 51 10 L54 5 Q55 2 57 1 C59 0 61 1 63 2 
+           Q65 4 65 6 L66 11 Q67 15 67 18 C67 20 66 21 66 23
+           Q67 24 69 25 L74 27 Q77 28 79 29 C82 31 83 33 84 36 
+           Q84 39 83 42 C82 45 80 47 77 48 L72 49 Q69 50 66 51
+           C67 53 69 56 70 59 Q71 61 71 64 L72 69 Q73 72 73 76 
+           C74 78 73 81 72 83 Q70 85 68 86 C66 87 63 86 61 84 
+           L57 79 Q55 75 53 71
+           Q52 75 51 79 L50 85 Q49 87 49 89 Z"
+        fill="url(#leafGradient)"
+        stroke="#8B4513"
+        stroke-width="0.5"/>
+  
+  <!-- Veins -->
+  <g stroke="#8B4513" stroke-width="0.8" fill="none" opacity="0.4">
+    <path d="M50 90 Q49 70 48 50 Q47 30 46 15"/>
+    <path d="M48 50 Q42 45 36 40 Q30 35 24 32"/>
+    <path d="M47 60 Q41 56 35 52"/>
+    <path d="M46 70 Q42 67 39 65"/>
+    <path d="M49 50 Q55 45 62 40 Q68 35 74 32"/>
+    <path d="M50 60 Q56 56 62 52"/>
+    <path d="M51 70 Q55 67 59 65"/>
+  </g>
+</svg>
+
