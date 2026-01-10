@@ -27,7 +27,7 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: Facebook, href: "#", label: "Facebook" },
-    { icon: Instagram, href: "#", label: "Instagram" },
+    { icon: Instagram, href: "https://www.instagram.com/royal_pashmina_and_nut_bazaar/", label: "Instagram" },
     { icon: Twitter, href: "#", label: "Twitter" },
     { icon: Youtube, href: "#", label: "YouTube" },
   ];
@@ -53,9 +53,9 @@ const Footer = () => {
             
             {/* Contact Info */}
             <div className="space-y-3 text-primary-foreground/70">
-              <a href="tel:+911234567890" className="flex items-center gap-3 hover:text-primary-foreground transition-colors">
+              <a href="tel:+918492802598" className="flex items-center gap-3 hover:text-primary-foreground transition-colors">
                 <Phone className="w-4 h-4" />
-                +91 123 456 7890
+                +91 849 280 2598
               </a>
               <a href="mailto:hello@kashmirheritage.com" className="flex items-center gap-3 hover:text-primary-foreground transition-colors">
                 <Mail className="w-4 h-4" />
@@ -63,7 +63,7 @@ const Footer = () => {
               </a>
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-1" />
-                <span>Lal Chowk, Srinagar, Kashmir 190001</span>
+                <span>Kharar, Punjab, 140301</span>
               </div>
             </div>
           </div>
@@ -103,6 +103,8 @@ const Footer = () => {
                 key={social.label}
                 href={social.href}
                 aria-label={social.label}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
               >
                 <social.icon className="w-5 h-5" />

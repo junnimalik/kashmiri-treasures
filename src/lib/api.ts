@@ -1,0 +1,168 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  images: string[];
+  category: 'shawls' | 'pherans' | 'handbags' | 'dry-fruits' | 'gift-hampers';
+  rating: number;
+  reviews: number;
+  inStock: boolean;
+  variants?: { name: string; options: string[] }[];
+  details?: Record<string, any>;
+  artisanStory?: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  token_type: string;
+}
+
+class ApiService {
+  private getAuthToken(): string | null {
+    return localStorage.getItem("admin_token");
+  }
+
+  private getHeaders(includeAuth = false): HeadersInit {
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+    
+    if (includeAuth) {
+      const token = this.getAuthToken();
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+    }
+    
+    return headers;
+  }
+
+  async login(username: string, password: string): Promise<LoginResponse> {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: "POST",
+      headers: this.getHeaders(),
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Invalid credentials");
+    }
+
+    const data = await response.json();
+    localStorage.setItem("admin_token", data.access_token);
+    return data;
+  }
+
+  logout(): void {
+    localStorage.removeItem("admin_token");
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getAuthToken();
+  }
+
+  async getProducts(category?: string): Promise<Product[]> {
+    const url = category 
+      ? `${API_BASE_URL}/api/products?category=${category}`
+      : `${API_BASE_URL}/api/products`;
+    
+    try {
+      const response = await fetch(url, {
+        headers: this.getHeaders(),
+        signal: AbortSignal.timeout(10000), // 10 second timeout
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch products: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        throw new Error("Request timeout - please check your connection");
+      }
+      throw error;
+    }
+  }
+
+  async getProduct(id: string): Promise<Product> {
+    const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+      headers: this.getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch product");
+    }
+
+    return response.json();
+  }
+
+  async createProduct(formData: FormData): Promise<Product> {
+    const token = this.getAuthToken();
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/products`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Failed to create product");
+    }
+
+    return response.json();
+  }
+
+  async updateProduct(id: string, formData: FormData): Promise<Product> {
+    const token = this.getAuthToken();
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Failed to update product");
+    }
+
+    return response.json();
+  }
+
+  async deleteProduct(id: string): Promise<void> {
+    const token = this.getAuthToken();
+    if (!token) {
+      throw new Error("Not authenticated");
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete product");
+    }
+  }
+}
+
+export const apiService = new ApiService();

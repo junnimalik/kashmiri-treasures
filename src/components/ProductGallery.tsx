@@ -1,17 +1,46 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingBag, Star } from "lucide-react";
-import { getProductsByCategory, Product } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
+import { apiService, Product } from "@/lib/api";
+import { useEffect, useState } from "react";
 
 interface ProductGalleryProps {
   category: 'shawls' | 'pherans' | 'handbags' | 'dry-fruits' | 'gift-hampers';
 }
 
 const ProductGallery = ({ category }: ProductGalleryProps) => {
-  const products = getProductsByCategory(category);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const { addItem } = useCart();
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const data = await apiService.getProducts(category);
+        setProducts(data);
+      } catch (error) {
+        console.error("Failed to load products:", error);
+        // Set empty array on error to prevent crashes
+        setProducts([]);
+        toast({
+          title: "Error",
+          description: "Failed to load products",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    // Add a small delay to prevent blocking initial render
+    const timer = setTimeout(() => {
+      loadProducts();
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [category]);
   
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -36,6 +65,16 @@ const ProductGallery = ({ category }: ProductGalleryProps) => {
       description: `${product.name} has been added to your cart.`,
     });
   };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-20">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (products.length === 0) {
     return (
@@ -66,7 +105,11 @@ const ProductGallery = ({ category }: ProductGalleryProps) => {
             >
               <div className="relative aspect-[3/4] overflow-hidden rounded-t-lg">
                 <img 
-                  src={product.image} 
+                  src={
+                    product.image.startsWith('/uploads') || product.image.startsWith('/')
+                      ? `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image}`
+                      : product.image
+                  }
                   alt={product.name}
                   className="w-full h-full object-cover image-zoom"
                 />

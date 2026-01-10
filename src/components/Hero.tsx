@@ -20,7 +20,6 @@ const Hero = () => {
       <div className="container mx-auto px-4 relative z-10 pt-20">
         <div className="max-w-2xl">
           <span className="inline-block text-accent font-medium tracking-[0.25em] uppercase text-sm mb-6 animate-fade-in-up">
-            Since 1947
           </span>
           
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-semibold text-foreground leading-tight mb-6 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
