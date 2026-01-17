@@ -1,4 +1,14 @@
+// API Base URL - use environment variable or fallback
+// In production, this should be set in .env file
+// Options:
+// 1. Subdomain: https://api.kashmiricraft.com
+// 2. Same domain: https://kashmiricraft.com (if Apache proxies /api to backend)
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+// Log API URL in development for debugging
+if (import.meta.env.DEV) {
+  console.log('API Base URL:', API_BASE_URL);
+}
 
 export interface Product {
   id: string;
@@ -30,6 +40,7 @@ class ApiService {
   private getHeaders(includeAuth = false): HeadersInit {
     const headers: HeadersInit = {
       "Content-Type": "application/json",
+      "Accept": "application/json",
     };
     
     if (includeAuth) {
@@ -74,17 +85,24 @@ class ApiService {
     try {
       const response = await fetch(url, {
         headers: this.getHeaders(),
-        signal: AbortSignal.timeout(10000), // 10 second timeout
+        signal: AbortSignal.timeout(15000), // 15 second timeout
+        credentials: 'include', // Include credentials for CORS
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch products: ${response.status}`);
+        const errorText = await response.text();
+        console.error(`API Error (${response.status}):`, errorText);
+        throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
       }
 
       return response.json();
     } catch (error: any) {
+      console.error('getProducts error:', error);
       if (error.name === 'AbortError') {
         throw new Error("Request timeout - please check your connection");
+      }
+      if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError')) {
+        throw new Error(`Cannot connect to API at ${API_BASE_URL}. Please check if the backend is running.`);
       }
       throw error;
     }

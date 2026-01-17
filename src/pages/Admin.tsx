@@ -128,12 +128,15 @@ const Admin = () => {
     try {
       const data = await apiService.getProducts();
       setProducts(data);
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Failed to load products:", error);
       toast({
-        title: "Error",
-        description: "Failed to load products",
+        title: "Error Loading Products",
+        description: error.message || "Failed to load products. Please check your connection and try again.",
         variant: "destructive",
       });
+      // Set empty array on error to prevent crashes
+      setProducts([]);
     } finally {
       setLoading(false);
     }
