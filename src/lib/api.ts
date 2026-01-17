@@ -3,7 +3,29 @@
 // Options:
 // 1. Subdomain: https://api.kashmiricraft.com
 // 2. Same domain: https://kashmiricraft.com (if Apache proxies /api to backend)
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+// 
+// IMPORTANT: Based on Apache config, use SAME DOMAIN (https://kashmiricraft.com)
+// The subdomain (api.kashmiricraft.com) may not be accessible from all networks
+function getApiBaseUrl(): string {
+  // If VITE_API_URL is set, use it
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // Auto-detect: if we're on production domain, use same domain
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    if (hostname === 'kashmiricraft.com' || hostname === 'www.kashmiricraft.com') {
+      // Use same domain since Apache proxies /api
+      return `${window.location.protocol}//${hostname}`;
+    }
+  }
+  
+  // Fallback to localhost for development
+  return "http://localhost:8000";
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Log API URL in development for debugging
 if (import.meta.env.DEV) {
