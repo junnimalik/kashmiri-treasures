@@ -184,9 +184,9 @@ const ProductDetail = () => {
               <div className="aspect-square rounded-xl overflow-hidden bg-muted">
                 <img 
                   src={
-                    product.image.startsWith('/uploads') || product.image.startsWith('/')
-                      ? `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image}`
-                      : product.image
+                    product.image.startsWith('http://') || product.image.startsWith('https://')
+                      ? product.image
+                      : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image.startsWith('/') ? '' : '/'}${product.image}`
                   }
                   alt={product.name}
                   className="w-full h-full object-cover"
@@ -197,9 +197,9 @@ const ProductDetail = () => {
                   <div key={i} className="aspect-square rounded-lg overflow-hidden bg-muted border-2 border-primary/30">
                     <img 
                       src={
-                        img.startsWith('/uploads') || img.startsWith('/')
-                          ? `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${img}`
-                          : img
+                        img.startsWith('http://') || img.startsWith('https://')
+                          ? img
+                          : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${img.startsWith('/') ? '' : '/'}${img}`
                       }
                       alt={`${product.name} ${i+1}`} 
                       className="w-full h-full object-cover" 
@@ -367,44 +367,44 @@ const ProductDetail = () => {
             <div className="bg-card rounded-xl p-6 border border-border">
               <h3 className="font-serif text-xl font-semibold mb-4">Product Details</h3>
               {product.details && Object.keys(product.details).length > 0 ? (
-                <dl className="space-y-3">
-                  {product.details.material && (
-                    <div className="flex justify-between py-2 border-b border-border">
-                      <dt className="text-muted-foreground">Material</dt>
-                      <dd className="font-medium">{product.details.material}</dd>
-                    </div>
-                  )}
-                  {product.details.dimensions && (
-                    <div className="flex justify-between py-2 border-b border-border">
-                      <dt className="text-muted-foreground">Dimensions</dt>
-                      <dd className="font-medium">{product.details.dimensions}</dd>
-                    </div>
-                  )}
-                  {product.details.weight && (
-                    <div className="flex justify-between py-2 border-b border-border">
-                      <dt className="text-muted-foreground">Weight</dt>
-                      <dd className="font-medium">{product.details.weight}</dd>
-                    </div>
-                  )}
-                  {product.details.origin && (
-                    <div className="flex justify-between py-2 border-b border-border">
-                      <dt className="text-muted-foreground">Origin</dt>
-                      <dd className="font-medium">{product.details.origin}</dd>
-                    </div>
-                  )}
-                  {product.details.shelfLife && (
-                    <div className="flex justify-between py-2 border-b border-border">
-                      <dt className="text-muted-foreground">Shelf Life</dt>
-                      <dd className="font-medium">{product.details.shelfLife}</dd>
-                    </div>
-                  )}
-                  {product.details.careInstructions && (
-                    <div className="flex justify-between py-2">
-                      <dt className="text-muted-foreground">Care</dt>
-                      <dd className="font-medium text-right max-w-[60%]">{product.details.careInstructions}</dd>
-                    </div>
-                  )}
-                </dl>
+              <dl className="space-y-3">
+                {product.details.material && (
+                  <div className="flex justify-between py-2 border-b border-border">
+                    <dt className="text-muted-foreground">Material</dt>
+                    <dd className="font-medium">{product.details.material}</dd>
+                  </div>
+                )}
+                {product.details.dimensions && (
+                  <div className="flex justify-between py-2 border-b border-border">
+                    <dt className="text-muted-foreground">Dimensions</dt>
+                    <dd className="font-medium">{product.details.dimensions}</dd>
+                  </div>
+                )}
+                {product.details.weight && (
+                  <div className="flex justify-between py-2 border-b border-border">
+                    <dt className="text-muted-foreground">Weight</dt>
+                    <dd className="font-medium">{product.details.weight}</dd>
+                  </div>
+                )}
+                {product.details.origin && (
+                  <div className="flex justify-between py-2 border-b border-border">
+                    <dt className="text-muted-foreground">Origin</dt>
+                    <dd className="font-medium">{product.details.origin}</dd>
+                  </div>
+                )}
+                {product.details.shelfLife && (
+                  <div className="flex justify-between py-2 border-b border-border">
+                    <dt className="text-muted-foreground">Shelf Life</dt>
+                    <dd className="font-medium">{product.details.shelfLife}</dd>
+                  </div>
+                )}
+                {product.details.careInstructions && (
+                  <div className="flex justify-between py-2">
+                    <dt className="text-muted-foreground">Care</dt>
+                    <dd className="font-medium text-right max-w-[60%]">{product.details.careInstructions}</dd>
+                  </div>
+                )}
+              </dl>
               ) : (
                 <p className="text-muted-foreground">No additional details available for this product.</p>
               )}
@@ -464,9 +464,9 @@ const ProductDetail = () => {
                   <div className="aspect-square rounded-lg overflow-hidden mb-4">
                     <img 
                       src={
-                        p.image.startsWith('/uploads') || p.image.startsWith('/')
-                          ? `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${p.image}`
-                          : p.image
+                        p.image.startsWith('http://') || p.image.startsWith('https://')
+                          ? p.image
+                          : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${p.image.startsWith('/') ? '' : '/'}${p.image}`
                       }
                       alt={p.name}
                       className="w-full h-full object-cover image-zoom"

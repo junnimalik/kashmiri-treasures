@@ -106,9 +106,9 @@ const ProductGallery = ({ category }: ProductGalleryProps) => {
               <div className="relative aspect-[3/4] overflow-hidden rounded-t-lg">
                 <img 
                   src={
-                    product.image.startsWith('/uploads') || product.image.startsWith('/')
-                      ? `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image}`
-                      : product.image
+                    product.image.startsWith('http://') || product.image.startsWith('https://')
+                      ? product.image
+                      : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image.startsWith('/') ? '' : '/'}${product.image}`
                   }
                   alt={product.name}
                   className="w-full h-full object-cover image-zoom"

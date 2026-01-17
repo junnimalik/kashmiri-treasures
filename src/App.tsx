@@ -30,33 +30,33 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <ErrorBoundary>
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <CartProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <CartSheet />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/shawls" element={<Shawls />} />
-                <Route path="/pherans" element={<Pherans />} />
-                <Route path="/handbags" element={<Handbags />} />
-                <Route path="/dry-fruits" element={<DryFruits />} />
-                <Route path="/gift-hampers" element={<GiftHampers />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/checkout" element={<Checkout />} />
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <CartProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <CartSheet />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/shawls" element={<Shawls />} />
+              <Route path="/pherans" element={<Pherans />} />
+              <Route path="/handbags" element={<Handbags />} />
+              <Route path="/dry-fruits" element={<DryFruits />} />
+              <Route path="/gift-hampers" element={<GiftHampers />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/checkout" element={<Checkout />} />
                 <Route path="/admin" element={<Admin />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </TooltipProvider>
-          </CartProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </HelmetProvider>
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </TooltipProvider>
+        </CartProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  </HelmetProvider>
   </ErrorBoundary>
 );
 

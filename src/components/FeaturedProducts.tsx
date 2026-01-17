@@ -64,23 +64,23 @@ const FeaturedProducts = () => {
             <p className="text-muted-foreground">No featured products available.</p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="group card-product bg-card rounded-xl overflow-hidden"
-              >
-                {/* Image */}
-                <div className="relative aspect-[3/4] overflow-hidden">
-                  <img
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="group card-product bg-card rounded-xl overflow-hidden"
+            >
+              {/* Image */}
+              <div className="relative aspect-[3/4] overflow-hidden">
+                <img
                     src={
-                      product.image.startsWith('/uploads') || product.image.startsWith('/')
-                        ? `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image}`
-                        : product.image
+                      product.image.startsWith('http://') || product.image.startsWith('https://')
+                        ? product.image
+                        : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image.startsWith('/') ? '' : '/'}${product.image}`
                     }
-                    alt={product.name}
-                    className="w-full h-full object-cover image-zoom"
-                  />
+                  alt={product.name}
+                  className="w-full h-full object-cover image-zoom"
+                />
 
                 {/* Quick Actions */}
                 <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
@@ -100,43 +100,43 @@ const FeaturedProducts = () => {
                 </div>
               </div>
 
-                {/* Content */}
-                <div className="p-5">
-                  <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+              {/* Content */}
+              <div className="p-5">
+                <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
                     {product.category}
+                </span>
+                <h3 className="font-serif text-lg font-medium text-foreground mt-1 mb-2 line-clamp-2">
+                  {product.name}
+                </h3>
+
+                {/* Rating */}
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 fill-accent text-accent" />
+                    <span className="text-sm font-medium text-foreground">
+                      {product.rating}
+                    </span>
+                  </div>
+                  <span className="text-muted-foreground text-sm">
+                    ({product.reviews} reviews)
                   </span>
-                  <h3 className="font-serif text-lg font-medium text-foreground mt-1 mb-2 line-clamp-2">
-                    {product.name}
-                  </h3>
+                </div>
 
-                  {/* Rating */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-accent text-accent" />
-                      <span className="text-sm font-medium text-foreground">
-                        {product.rating}
-                      </span>
-                    </div>
-                    <span className="text-muted-foreground text-sm">
-                      ({product.reviews} reviews)
+                {/* Price */}
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-lg text-foreground">
+                    {formatPrice(product.price)}
+                  </span>
+                  {product.originalPrice && (
+                    <span className="text-muted-foreground line-through text-sm">
+                      {formatPrice(product.originalPrice)}
                     </span>
-                  </div>
-
-                  {/* Price */}
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-lg text-foreground">
-                      {formatPrice(product.price)}
-                    </span>
-                    {product.originalPrice && (
-                      <span className="text-muted-foreground line-through text-sm">
-                        {formatPrice(product.originalPrice)}
-                      </span>
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
         )}
       </div>
     </section>

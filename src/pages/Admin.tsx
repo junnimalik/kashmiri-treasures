@@ -337,9 +337,9 @@ const Admin = () => {
         </Helmet>
         <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-lg shadow-lg">
           <div className="text-center space-y-2">
-            <Package className="h-12 w-12 mx-auto text-primary" />
-            <h1 className="text-2xl font-serif font-bold">Admin Panel</h1>
-            <p className="text-muted-foreground">Login to manage products</p>
+            <Package className="h-16 w-16 mx-auto text-primary" />
+            <h1 className="text-4xl font-serif font-bold">Admin Panel</h1>
+            <p className="text-lg text-muted-foreground">Login to manage products</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
@@ -388,8 +388,8 @@ const Admin = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-serif font-bold">Admin Panel</h1>
-              <p className="text-sm text-muted-foreground">Kashmiri Treasures</p>
+              <h1 className="text-3xl font-serif font-bold">Admin Panel</h1>
+              <p className="text-base text-muted-foreground">Kashmiri Treasures</p>
             </div>
             <Button variant="ghost" onClick={() => navigate("/")}>
               View Website
@@ -732,9 +732,9 @@ const Admin = () => {
                       <TableCell>
                         <img
                           src={
-                            product.image.startsWith('/uploads') || product.image.startsWith('/')
-                              ? `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image}`
-                              : product.image
+                            product.image.startsWith('http://') || product.image.startsWith('https://')
+                              ? product.image
+                              : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image.startsWith('/') ? '' : '/'}${product.image}`
                           }
                           alt={product.name}
                           className="w-16 h-16 object-cover rounded"

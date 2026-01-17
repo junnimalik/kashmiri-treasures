@@ -26,18 +26,26 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Kashmiri Treasures API", version="1.0.0")
 
+# CORS configuration - supports both development and production
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "").split(",") if os.getenv("CORS_ORIGINS") else [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://localhost:8081",
+    "http://127.0.0.1:8081",
+    "http://localhost:8082",
+    "http://127.0.0.1:8082",
+    "http://localhost:5173",
+    "https://kashmiricraft.com",
+    "https://www.kashmiricraft.com",
+]
+
+# Filter out empty strings
+CORS_ORIGINS = [origin.strip() for origin in CORS_ORIGINS if origin.strip()]
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:8080",
-        "http://127.0.0.1:8080",
-        "http://localhost:8081",
-        "http://127.0.0.1:8081",
-        "http://localhost:8082",
-        "http://127.0.0.1:8082",
-        "http://localhost:5173",
-    ],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
@@ -68,40 +76,28 @@ def save_uploaded_file(file: UploadFile, product_id: str) -> str:
     return f"/uploads/{filename}"
 
 # Authentication endpoints
-@app.post("/api/auth/login", response_model=Token)
+@app.post("/api/auth/login")
 async def login(login_data: LoginRequest):
-    try:
-        if not authenticate_user(login_data.username, login_data.password):
-            raise HTTPException(
-                status_code=401,
-                detail="Incorrect username or password"
-            )
-        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = create_access_token(
-            data={"sub": login_data.username}, expires_delta=access_token_expires
-        )
-        return {"access_token": access_token, "token_type": "bearer"}
-    except Exception as e:
+    if not authenticate_user(login_data.username, login_data.password):
         raise HTTPException(
-            status_code=400,
-            detail=str(e)
+            status_code=401,
+            detail="Incorrect username or password"
         )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": login_data.username}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
 # Handle OPTIONS requests explicitly for all API routes
 @app.options("/api/{full_path:path}")
 async def options_handler(full_path: str, request: Request):
     origin = request.headers.get("origin", "")
-    allowed_origins = [
-        "http://localhost:8080",
-        "http://127.0.0.1:8080",
-        "http://localhost:8081",
-        "http://127.0.0.1:8081",
-        "http://localhost:8082",
-        "http://127.0.0.1:8082",
-        "http://localhost:5173",
-    ]
+    # Use the same CORS_ORIGINS from middleware configuration
+    allowed_origins = CORS_ORIGINS
     
-    allow_origin = origin if origin in allowed_origins else allowed_origins[0]
+    # Allow the origin if it's in the allowed list, otherwise use the first allowed origin
+    allow_origin = origin if origin in allowed_origins else (allowed_origins[0] if allowed_origins else "*")
     
     return JSONResponse(
         content={},
