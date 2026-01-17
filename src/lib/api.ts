@@ -1,36 +1,4 @@
-// API Base URL - use environment variable or fallback
-// In production, this should be set in .env file
-// Options:
-// 1. Subdomain: https://api.kashmiricraft.com
-// 2. Same domain: https://kashmiricraft.com (if Apache proxies /api to backend)
-// 
-// IMPORTANT: Based on Apache config, use SAME DOMAIN (https://kashmiricraft.com)
-// The subdomain (api.kashmiricraft.com) may not be accessible from all networks
-function getApiBaseUrl(): string {
-  // If VITE_API_URL is set, use it
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
-  }
-  
-  // Auto-detect: if we're on production domain, use same domain
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    if (hostname === 'kashmiricraft.com' || hostname === 'www.kashmiricraft.com') {
-      // Use same domain since Apache proxies /api
-      return `${window.location.protocol}//${hostname}`;
-    }
-  }
-  
-  // Fallback to localhost for development
-  return "http://localhost:8000";
-}
-
-const API_BASE_URL = getApiBaseUrl();
-
-// Log API URL in development for debugging
-if (import.meta.env.DEV) {
-  console.log('API Base URL:', API_BASE_URL);
-}
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export interface Product {
   id: string;
@@ -62,7 +30,6 @@ class ApiService {
   private getHeaders(includeAuth = false): HeadersInit {
     const headers: HeadersInit = {
       "Content-Type": "application/json",
-      "Accept": "application/json",
     };
     
     if (includeAuth) {
@@ -99,67 +66,28 @@ class ApiService {
     return !!this.getAuthToken();
   }
 
-  async checkHealth(): Promise<boolean> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/health`, {
-        method: 'GET',
-        signal: AbortSignal.timeout(5000), // 5 second timeout for health check
-        cache: 'no-cache',
-      });
-      return response.ok;
-    } catch (error) {
-      console.error('Health check failed:', error);
-      return false;
-    }
-  }
-
-  async getProducts(category?: string, retries = 2): Promise<Product[]> {
+  async getProducts(category?: string): Promise<Product[]> {
     const url = category 
       ? `${API_BASE_URL}/api/products?category=${category}`
       : `${API_BASE_URL}/api/products`;
     
-    for (let attempt = 0; attempt <= retries; attempt++) {
-      try {
-        // Create AbortController for better timeout handling
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-        
-        const response = await fetch(url, {
-          headers: this.getHeaders(),
-          signal: controller.signal,
-          credentials: 'include',
-          cache: 'no-cache', // Prevent caching issues
-        });
+    try {
+      const response = await fetch(url, {
+        headers: this.getHeaders(),
+        signal: AbortSignal.timeout(10000), // 10 second timeout
+      });
 
-        clearTimeout(timeoutId);
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error(`API Error (${response.status}):`, errorText);
-          throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
-        }
-
-        return response.json();
-      } catch (error: any) {
-        console.error(`getProducts error (attempt ${attempt + 1}/${retries + 1}):`, error);
-        
-        // If it's the last attempt, throw the error
-        if (attempt === retries) {
-          if (error.name === 'AbortError' || error.message?.includes('timeout')) {
-            throw new Error("Request timeout - the server is taking too long to respond. Please check your connection and try again.");
-          }
-          if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError') || error.message?.includes('CORS')) {
-            throw new Error(`Cannot connect to API at ${API_BASE_URL}. Please check if the backend is running and accessible.`);
-          }
-          throw error;
-        }
-        
-        // Wait before retrying (exponential backoff)
-        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+      if (!response.ok) {
+        throw new Error(`Failed to fetch products: ${response.status}`);
       }
+
+      return response.json();
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        throw new Error("Request timeout - please check your connection");
+      }
+      throw error;
     }
-    
-    throw new Error("Failed to fetch products after multiple attempts");
   }
 
   async getProduct(id: string): Promise<Product> {

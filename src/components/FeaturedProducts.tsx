@@ -13,12 +13,10 @@ const FeaturedProducts = () => {
         const allProducts = await apiService.getProducts();
         // Get first 4 products as featured
         setProducts(allProducts.slice(0, 4));
-      } catch (error: any) {
+      } catch (error) {
         console.error("Failed to load featured products:", error);
         // Set empty array on error to prevent crashes
         setProducts([]);
-        // Don't show toast for featured products to avoid spam
-        // Error is logged to console for debugging
       } finally {
         setLoading(false);
       }
