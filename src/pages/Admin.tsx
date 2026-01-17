@@ -343,11 +343,11 @@ const Admin = () => {
         <Helmet>
           <title>Admin Login - Kashmiri Treasures</title>
         </Helmet>
-        <div className="w-full max-w-md p-6 sm:p-8 space-y-6 bg-card rounded-lg shadow-lg">
+        <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-lg shadow-lg">
           <div className="text-center space-y-2">
-            <Package className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-primary" />
-            <h1 className="text-3xl sm:text-4xl font-serif font-bold">Admin Panel</h1>
-            <p className="text-base sm:text-lg text-muted-foreground">Login to manage products</p>
+            <Package className="h-16 w-16 mx-auto text-primary" />
+            <h1 className="text-4xl font-serif font-bold">Admin Panel</h1>
+            <p className="text-lg text-muted-foreground">Login to manage products</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
@@ -394,32 +394,32 @@ const Admin = () => {
       {/* Simple header for admin panel without navigation */}
       <header className="border-b border-border bg-background">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-serif font-bold">Admin Panel</h1>
-              <p className="text-sm sm:text-base text-muted-foreground">Kashmiri Treasures</p>
+              <h1 className="text-3xl font-serif font-bold">Admin Panel</h1>
+              <p className="text-base text-muted-foreground">Kashmiri Treasures</p>
             </div>
-            <Button variant="ghost" onClick={() => navigate("/")} className="w-full sm:w-auto">
+            <Button variant="ghost" onClick={() => navigate("/")}>
               View Website
             </Button>
           </div>
         </div>
       </header>
-      <div className="container mx-auto px-4 py-4 sm:py-8">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold mb-2">Product Management</h1>
-            <p className="text-sm sm:text-base text-muted-foreground">Manage your products</p>
+            <h1 className="text-3xl font-serif font-bold mb-2">Product Management</h1>
+            <p className="text-muted-foreground">Manage your products</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <div className="flex gap-2">
             <Dialog open={showProductDialog} onOpenChange={setShowProductDialog}>
               <DialogTrigger asChild>
-                <Button onClick={resetForm} className="w-full sm:w-auto">
+                <Button onClick={resetForm}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Product
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-[95vw] sm:max-w-3xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+              <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>
                     {editingProduct ? "Edit Product" : "Add New Product"}
@@ -431,7 +431,7 @@ const Admin = () => {
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">Product Name *</Label>
                       <Input
@@ -482,7 +482,7 @@ const Admin = () => {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="price">Price (₹) *</Label>
                       <Input
@@ -527,7 +527,7 @@ const Admin = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="reviews">Reviews Count</Label>
                       <Input
@@ -677,7 +677,7 @@ const Admin = () => {
                     )}
                   </div>
 
-                  <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-4">
+                  <div className="flex justify-end gap-2">
                     <Button
                       type="button"
                       variant="outline"
@@ -685,11 +685,10 @@ const Admin = () => {
                         setShowProductDialog(false);
                         resetForm();
                       }}
-                      className="w-full sm:w-auto"
                     >
                       Cancel
                     </Button>
-                    <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+                    <Button type="submit" disabled={loading}>
                       {loading
                         ? "Saving..."
                         : editingProduct
@@ -700,7 +699,7 @@ const Admin = () => {
                 </form>
               </DialogContent>
             </Dialog>
-            <Button variant="outline" onClick={handleLogout} className="w-full sm:w-auto">
+            <Button variant="outline" onClick={handleLogout}>
               <LogOut className="h-4 w-4 mr-2" />
               Logout
             </Button>
@@ -711,82 +710,32 @@ const Admin = () => {
           <div className="text-center py-12">
             <p className="text-muted-foreground">Loading products...</p>
           </div>
-        ) : products.length === 0 ? (
-          <div className="border rounded-lg text-center py-12">
-            <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground">No products found</p>
-            <p className="text-sm text-muted-foreground mt-2">
-              Click "Add Product" to create your first product
-            </p>
-          </div>
         ) : (
-          <>
-            {/* Mobile Card View */}
-            <div className="block md:hidden space-y-4">
-              {products.map((product) => (
-                <div key={product.id} className="border rounded-lg p-4 space-y-3">
-                  <div className="flex items-start gap-3">
-                    <img
-                      src={
-                        product.image.startsWith('http://') || product.image.startsWith('https://')
-                          ? product.image
-                          : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image.startsWith('/') ? '' : '/'}${product.image}`
-                      }
-                      alt={product.name}
-                      className="w-20 h-20 object-cover rounded flex-shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-sm sm:text-base truncate">{product.name}</h3>
-                      <p className="text-xs text-muted-foreground mt-1 capitalize">{product.category}</p>
-                      <p className="text-base font-semibold text-primary mt-2">₹{product.price.toLocaleString()}</p>
-                      <div className="mt-2">
-                        {product.inStock ? (
-                          <span className="text-xs text-green-600 font-medium">In Stock</span>
-                        ) : (
-                          <span className="text-xs text-red-600 font-medium">Out of Stock</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-2 pt-2 border-t">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => openEditDialog(product)}
-                      className="flex-1"
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => setDeleteProductId(product.id)}
-                      className="flex-1"
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Desktop Table View */}
-            <div className="hidden md:block border rounded-lg overflow-x-auto">
-              <Table>
-                <TableHeader>
+          <div className="border rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Image</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>Stock</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {products.length === 0 ? (
                   <TableRow>
-                    <TableHead>Image</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Stock</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableCell colSpan={6} className="text-center py-12">
+                      <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <p className="text-muted-foreground">No products found</p>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Click "Add Product" to create your first product
+                      </p>
+                    </TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {products.map((product) => (
+                ) : (
+                  products.map((product) => (
                     <TableRow key={product.id}>
                       <TableCell>
                         <img
@@ -830,11 +779,11 @@ const Admin = () => {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </div>
 
