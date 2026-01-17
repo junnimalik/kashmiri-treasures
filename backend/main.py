@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form, Req
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from sqlalchemy.orm import Session
 from typing import List, Optional
 import os
@@ -9,6 +10,11 @@ import shutil
 import uuid
 from datetime import timedelta
 from PIL import Image
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 from database import get_db, Base, engine
 from models import Product
@@ -60,6 +66,15 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Mount static files for serving uploaded images
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
+# Add exception handler for validation errors
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error(f"Validation error on {request.url.path}: {exc.errors()}")
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors(), "message": "Validation error - check required fields"}
+    )
 
 def save_uploaded_file(file: UploadFile, product_id: str) -> str:
     """Save uploaded file and return the relative path"""
@@ -138,7 +153,7 @@ async def create_product(
     description: str = Form(...),
     price: str = Form(...),
     original_price: Optional[str] = Form(None),
-    category: CategoryEnum = Form(...),
+    category: str = Form(...),  # Accept as string first, validate below
     in_stock: str = Form("true"),
     rating: str = Form("0.0"),
     reviews: str = Form("0"),
@@ -152,8 +167,17 @@ async def create_product(
 ):
     import json
     
+    # Validate category
+    try:
+        category_enum = CategoryEnum(category)
+    except ValueError:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Invalid category: {category}. Must be one of: {[e.value for e in CategoryEnum]}"
+        )
+    
     # Generate product ID
-    product_id = f"{category.value}-{uuid.uuid4().hex[:6]}"
+    product_id = f"{category_enum.value}-{uuid.uuid4().hex[:6]}"
     
     # Save main image
     main_image_path = save_uploaded_file(image, product_id)
@@ -216,7 +240,7 @@ async def create_product(
         original_price=original_price_float,
         image=main_image_path,
         images=images_data,
-        category=category.value,
+        category=category_enum.value,
         in_stock=in_stock_bool,
         rating=rating_float,
         reviews=reviews_int,

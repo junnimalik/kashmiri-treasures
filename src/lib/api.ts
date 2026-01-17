@@ -118,7 +118,14 @@ class ApiService {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.detail || "Failed to create product");
+      // Handle validation errors (422)
+      if (response.status === 422 && error.detail) {
+        const errorMessages = Array.isArray(error.detail) 
+          ? error.detail.map((e: any) => `${e.loc?.join('.')}: ${e.msg}`).join(', ')
+          : JSON.stringify(error.detail);
+        throw new Error(`Validation error: ${errorMessages}`);
+      }
+      throw new Error(error.detail || error.message || "Failed to create product");
     }
 
     return response.json();

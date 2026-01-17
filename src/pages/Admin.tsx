@@ -269,9 +269,17 @@ const Admin = () => {
           formDataToSend.append("details", formData.details);
         }
 
-        if (mainImage) {
-          formDataToSend.append("image", mainImage);
+        // Image is required for create
+        if (!mainImage) {
+          toast({
+            title: "Error",
+            description: "Please select a main product image",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
         }
+        formDataToSend.append("image", mainImage);
 
         additionalImages.forEach((img) => {
           formDataToSend.append("additional_images", img);
