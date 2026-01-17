@@ -77,35 +77,67 @@ class ApiService {
     return !!this.getAuthToken();
   }
 
-  async getProducts(category?: string): Promise<Product[]> {
+  async checkHealth(): Promise<boolean> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/health`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(5000), // 5 second timeout for health check
+        cache: 'no-cache',
+      });
+      return response.ok;
+    } catch (error) {
+      console.error('Health check failed:', error);
+      return false;
+    }
+  }
+
+  async getProducts(category?: string, retries = 2): Promise<Product[]> {
     const url = category 
       ? `${API_BASE_URL}/api/products?category=${category}`
       : `${API_BASE_URL}/api/products`;
     
-    try {
-      const response = await fetch(url, {
-        headers: this.getHeaders(),
-        signal: AbortSignal.timeout(15000), // 15 second timeout
-        credentials: 'include', // Include credentials for CORS
-      });
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        // Create AbortController for better timeout handling
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+        
+        const response = await fetch(url, {
+          headers: this.getHeaders(),
+          signal: controller.signal,
+          credentials: 'include',
+          cache: 'no-cache', // Prevent caching issues
+        });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`API Error (${response.status}):`, errorText);
-        throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
-      }
+        clearTimeout(timeoutId);
 
-      return response.json();
-    } catch (error: any) {
-      console.error('getProducts error:', error);
-      if (error.name === 'AbortError') {
-        throw new Error("Request timeout - please check your connection");
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`API Error (${response.status}):`, errorText);
+          throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
+        }
+
+        return response.json();
+      } catch (error: any) {
+        console.error(`getProducts error (attempt ${attempt + 1}/${retries + 1}):`, error);
+        
+        // If it's the last attempt, throw the error
+        if (attempt === retries) {
+          if (error.name === 'AbortError' || error.message?.includes('timeout')) {
+            throw new Error("Request timeout - the server is taking too long to respond. Please check your connection and try again.");
+          }
+          if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError') || error.message?.includes('CORS')) {
+            throw new Error(`Cannot connect to API at ${API_BASE_URL}. Please check if the backend is running and accessible.`);
+          }
+          throw error;
+        }
+        
+        // Wait before retrying (exponential backoff)
+        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
       }
-      if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError')) {
-        throw new Error(`Cannot connect to API at ${API_BASE_URL}. Please check if the backend is running.`);
-      }
-      throw error;
     }
+    
+    throw new Error("Failed to fetch products after multiple attempts");
   }
 
   async getProduct(id: string): Promise<Product> {

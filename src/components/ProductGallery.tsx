@@ -20,13 +20,13 @@ const ProductGallery = ({ category }: ProductGalleryProps) => {
       try {
         const data = await apiService.getProducts(category);
         setProducts(data);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to load products:", error);
         // Set empty array on error to prevent crashes
         setProducts([]);
         toast({
-          title: "Error",
-          description: "Failed to load products",
+          title: "Error Loading Products",
+          description: error.message || "Failed to load products. Please check your connection.",
           variant: "destructive",
         });
       } finally {
