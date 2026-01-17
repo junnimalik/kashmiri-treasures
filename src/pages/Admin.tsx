@@ -419,59 +419,60 @@ const Admin = () => {
                   Add Product
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-[95vw] sm:max-w-3xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
-                <DialogHeader>
-                  <DialogTitle>
+              <DialogContent className="w-[95vw] max-w-3xl max-h-[85vh] overflow-y-auto p-3 sm:p-6 rounded-lg">
+                <DialogHeader className="pb-2">
+                  <DialogTitle className="text-lg sm:text-xl">
                     {editingProduct ? "Edit Product" : "Add New Product"}
                   </DialogTitle>
-                  <DialogDescription>
+                  <DialogDescription className="text-xs sm:text-sm">
                     {editingProduct
                       ? "Update product information"
-                      : "Fill in the details to add a new product"}
+                      : "Fill in the details"}
                   </DialogDescription>
                 </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name" className="text-sm">Product Name *</Label>
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
-                        required
-                        className="text-sm"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="category" className="text-sm">Category *</Label>
-                      <Select
-                        value={formData.category}
-                        onValueChange={(value) =>
-                          setFormData({
-                            ...formData,
-                            category: value as Product["category"],
-                          })
-                        }
-                        required
-                      >
-                        <SelectTrigger className="text-sm">
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="shawls">Shawls</SelectItem>
-                          <SelectItem value="pherans">Pherans</SelectItem>
-                          <SelectItem value="handbags">Handbags</SelectItem>
-                          <SelectItem value="dry-fruits">Dry Fruits</SelectItem>
-                          <SelectItem value="gift-hampers">Gift Hampers</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+                  {/* Name & Category */}
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-xs sm:text-sm font-medium">Product Name *</Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      required
+                      className="text-sm h-9"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="category" className="text-xs sm:text-sm font-medium">Category *</Label>
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value) =>
+                        setFormData({
+                          ...formData,
+                          category: value as Product["category"],
+                        })
+                      }
+                      required
+                    >
+                      <SelectTrigger className="text-sm h-9">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="shawls">Shawls</SelectItem>
+                        <SelectItem value="pherans">Pherans</SelectItem>
+                        <SelectItem value="handbags">Handbags</SelectItem>
+                        <SelectItem value="dry-fruits">Dry Fruits</SelectItem>
+                        <SelectItem value="gift-hampers">Gift Hampers</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
+                  {/* Description */}
                   <div className="space-y-2">
-                    <Label htmlFor="description" className="text-sm">Description *</Label>
+                    <Label htmlFor="description" className="text-xs sm:text-sm font-medium">Description *</Label>
                     <Textarea
                       id="description"
                       value={formData.description}
@@ -479,14 +480,15 @@ const Admin = () => {
                         setFormData({ ...formData, description: e.target.value })
                       }
                       required
-                      rows={3}
-                      className="text-sm"
+                      rows={2}
+                      className="text-sm resize-none"
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="price" className="text-sm">Price (₹) *</Label>
+                  {/* Price Row */}
+                  <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                    <div className="space-y-1">
+                      <Label htmlFor="price" className="text-xs sm:text-sm font-medium">Price (₹) *</Label>
                       <Input
                         id="price"
                         type="number"
@@ -496,11 +498,11 @@ const Admin = () => {
                           setFormData({ ...formData, price: e.target.value })
                         }
                         required
-                        className="text-sm"
+                        className="text-sm h-9"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="originalPrice" className="text-sm">Original Price</Label>
+                    <div className="space-y-1">
+                      <Label htmlFor="originalPrice" className="text-xs sm:text-sm font-medium">Original Price</Label>
                       <Input
                         id="originalPrice"
                         type="number"
@@ -512,11 +514,15 @@ const Admin = () => {
                             originalPrice: e.target.value,
                           })
                         }
-                        className="text-sm"
+                        className="text-sm h-9"
                       />
                     </div>
-                    <div className="space-y-2 col-span-2 sm:col-span-1">
-                      <Label htmlFor="rating" className="text-sm">Rating</Label>
+                  </div>
+
+                  {/* Rating & Reviews Row */}
+                  <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                    <div className="space-y-1">
+                      <Label htmlFor="rating" className="text-xs sm:text-sm font-medium">Rating</Label>
                       <Input
                         id="rating"
                         type="number"
@@ -527,14 +533,11 @@ const Admin = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, rating: e.target.value })
                         }
-                        className="text-sm"
+                        className="text-sm h-9"
                       />
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="reviews" className="text-sm">Reviews Count</Label>
+                    <div className="space-y-1">
+                      <Label htmlFor="reviews" className="text-xs sm:text-sm font-medium">Reviews</Label>
                       <Input
                         id="reviews"
                         type="number"
@@ -542,11 +545,11 @@ const Admin = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, reviews: e.target.value })
                         }
-                        className="text-sm"
+                        className="text-sm h-9"
                       />
                     </div>
-                    <div className="space-y-2 flex items-end">
-                      <div className="flex items-center space-x-2">
+                    <div className="space-y-1 flex flex-col justify-end">
+                      <div className="flex items-center space-x-2 h-9">
                         <input
                           type="checkbox"
                           id="inStock"
@@ -557,63 +560,72 @@ const Admin = () => {
                               inStock: e.target.checked,
                             })
                           }
-                          className="h-5 w-5"
+                          className="h-4 w-4 sm:h-5 sm:w-5 accent-primary"
                         />
-                        <Label htmlFor="inStock" className="text-sm">In Stock</Label>
+                        <Label htmlFor="inStock" className="text-xs sm:text-sm">In Stock</Label>
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="artisanStory" className="text-sm">Artisan Story</Label>
-                    <Textarea
-                      id="artisanStory"
-                      value={formData.artisanStory}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          artisanStory: e.target.value,
-                        })
-                      }
-                      rows={2}
-                      className="text-sm"
-                    />
-                  </div>
+                  {/* Artisan Story - Collapsible on mobile */}
+                  <details className="border rounded-lg p-2 sm:p-3">
+                    <summary className="text-xs sm:text-sm font-medium cursor-pointer">
+                      Advanced Options (optional)
+                    </summary>
+                    <div className="space-y-3 mt-3">
+                      <div className="space-y-1">
+                        <Label htmlFor="artisanStory" className="text-xs sm:text-sm">Artisan Story</Label>
+                        <Textarea
+                          id="artisanStory"
+                          value={formData.artisanStory}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              artisanStory: e.target.value,
+                            })
+                          }
+                          rows={2}
+                          className="text-sm resize-none"
+                        />
+                      </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="variants" className="text-sm">
-                      Variants (JSON - optional)
-                    </Label>
-                    <Textarea
-                      id="variants"
-                      value={formData.variants}
-                      onChange={(e) =>
-                        setFormData({ ...formData, variants: e.target.value })
-                      }
-                      rows={2}
-                      placeholder='[{"name": "Color", "options": ["Red", "Blue"]}]'
-                      className="text-sm"
-                    />
-                  </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="variants" className="text-xs sm:text-sm">
+                          Variants (JSON)
+                        </Label>
+                        <Textarea
+                          id="variants"
+                          value={formData.variants}
+                          onChange={(e) =>
+                            setFormData({ ...formData, variants: e.target.value })
+                          }
+                          rows={2}
+                          placeholder='[{"name": "Color", "options": ["Red"]}]'
+                          className="text-xs sm:text-sm resize-none font-mono"
+                        />
+                      </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="details" className="text-sm">
-                      Details (JSON - optional)
-                    </Label>
-                    <Textarea
-                      id="details"
-                      value={formData.details}
-                      onChange={(e) =>
-                        setFormData({ ...formData, details: e.target.value })
-                      }
-                      rows={2}
-                      placeholder='{"material": "Cotton", "origin": "Kashmir"}'
-                      className="text-sm"
-                    />
-                  </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="details" className="text-xs sm:text-sm">
+                          Details (JSON)
+                        </Label>
+                        <Textarea
+                          id="details"
+                          value={formData.details}
+                          onChange={(e) =>
+                            setFormData({ ...formData, details: e.target.value })
+                          }
+                          rows={2}
+                          placeholder='{"material": "Cotton"}'
+                          className="text-xs sm:text-sm resize-none font-mono"
+                        />
+                      </div>
+                    </div>
+                  </details>
 
+                  {/* Images Section */}
                   <div className="space-y-2">
-                    <Label htmlFor="mainImage" className="text-sm">
+                    <Label htmlFor="mainImage" className="text-xs sm:text-sm font-medium">
                       Main Image {!editingProduct && "*"}
                     </Label>
                     <Input
@@ -622,14 +634,14 @@ const Admin = () => {
                       accept="image/*"
                       onChange={handleImageChange}
                       required={!editingProduct}
-                      className="text-sm"
+                      className="text-xs sm:text-sm h-9"
                     />
                     {imagePreview && (
-                      <div className="relative w-24 h-24 sm:w-32 sm:h-32 mt-2">
+                      <div className="relative w-16 h-16 sm:w-24 sm:h-24 mt-1">
                         <img
                           src={imagePreview}
                           alt="Preview"
-                          className="w-full h-full object-cover rounded"
+                          className="w-full h-full object-cover rounded border"
                         />
                         <Button
                           type="button"
@@ -648,29 +660,29 @@ const Admin = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="additionalImages" className="text-sm">Additional Images</Label>
+                    <Label htmlFor="additionalImages" className="text-xs sm:text-sm font-medium">Additional Images</Label>
                     <Input
                       id="additionalImages"
                       type="file"
                       accept="image/*"
                       multiple
                       onChange={handleAdditionalImagesChange}
-                      className="text-sm"
+                      className="text-xs sm:text-sm h-9"
                     />
                     {additionalPreviews.length > 0 && (
-                      <div className="flex gap-2 mt-2 flex-wrap">
+                      <div className="flex gap-1 sm:gap-2 mt-1 flex-wrap">
                         {additionalPreviews.map((preview, idx) => (
-                          <div key={idx} className="relative w-16 h-16 sm:w-20 sm:h-20">
+                          <div key={idx} className="relative w-12 h-12 sm:w-16 sm:h-16">
                             <img
                               src={preview}
                               alt={`Preview ${idx + 1}`}
-                              className="w-full h-full object-cover rounded"
+                              className="w-full h-full object-cover rounded border"
                             />
                             <Button
                               type="button"
                               variant="destructive"
                               size="icon"
-                              className="absolute -top-1 -right-1 h-5 w-5"
+                              className="absolute -top-1 -right-1 h-4 w-4 sm:h-5 sm:w-5"
                               onClick={() => {
                                 const newPreviews = [...additionalPreviews];
                                 const newImages = [...additionalImages];
@@ -680,7 +692,7 @@ const Admin = () => {
                                 setAdditionalImages(newImages);
                               }}
                             >
-                              <X className="h-3 w-3" />
+                              <X className="h-2 w-2 sm:h-3 sm:w-3" />
                             </Button>
                           </div>
                         ))}
@@ -688,19 +700,21 @@ const Admin = () => {
                     )}
                   </div>
 
-                  <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-2">
+                  {/* Submit Buttons - Sticky on mobile */}
+                  <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t sticky bottom-0 bg-background pb-1">
                     <Button
                       type="button"
                       variant="outline"
+                      size="sm"
                       onClick={() => {
                         setShowProductDialog(false);
                         resetForm();
                       }}
-                      className="w-full sm:w-auto"
+                      className="w-full sm:w-auto text-xs sm:text-sm"
                     >
                       Cancel
                     </Button>
-                    <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+                    <Button type="submit" disabled={loading} size="sm" className="w-full sm:w-auto text-xs sm:text-sm">
                       {loading
                         ? "Saving..."
                         : editingProduct

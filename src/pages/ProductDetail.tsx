@@ -16,7 +16,9 @@ import {
   ChevronRight,
   Minus,
   Plus,
-  Check
+  Check,
+  X,
+  ZoomIn
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -49,8 +51,17 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [showLightbox, setShowLightbox] = useState(false);
 
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+
+  // Set initial selected image when product loads
+  useEffect(() => {
+    if (product?.image) {
+      setSelectedImage(product.image);
+    }
+  }, [product]);
 
   useEffect(() => {
     if (product) {
@@ -176,25 +187,92 @@ const ProductDetail = () => {
           </nav>
         </div>
 
+        {/* Lightbox Modal */}
+        {showLightbox && (
+          <div 
+            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+            onClick={() => setShowLightbox(false)}
+          >
+            <button 
+              className="absolute top-4 right-4 text-white hover:text-gray-300 z-50"
+              onClick={() => setShowLightbox(false)}
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <img 
+              src={
+                (selectedImage || product.image).startsWith('http://') || (selectedImage || product.image).startsWith('https://')
+                  ? (selectedImage || product.image)
+                  : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${(selectedImage || product.image).startsWith('/') ? '' : '/'}${selectedImage || product.image}`
+              }
+              alt={product.name}
+              className="max-w-full max-h-[90vh] object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+            {/* Thumbnail navigation in lightbox */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              {product.images.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImage(img);
+                  }}
+                  className={`w-16 h-16 rounded overflow-hidden border-2 transition-all ${
+                    (selectedImage || product.image) === img ? 'border-white' : 'border-transparent opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <img 
+                    src={
+                      img.startsWith('http://') || img.startsWith('https://')
+                        ? img
+                        : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${img.startsWith('/') ? '' : '/'}${img}`
+                    }
+                    alt={`${product.name} ${i+1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Product Section */}
         <section className="container mx-auto px-4 py-8">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Product Images */}
             <div className="space-y-4">
-              <div className="aspect-square rounded-xl overflow-hidden bg-muted">
+              {/* Main Image - Clickable */}
+              <div 
+                className="aspect-square rounded-xl overflow-hidden bg-muted cursor-pointer relative group"
+                onClick={() => setShowLightbox(true)}
+              >
                 <img 
                   src={
-                    product.image.startsWith('http://') || product.image.startsWith('https://')
-                      ? product.image
-                      : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image.startsWith('/') ? '' : '/'}${product.image}`
+                    (selectedImage || product.image).startsWith('http://') || (selectedImage || product.image).startsWith('https://')
+                      ? (selectedImage || product.image)
+                      : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${(selectedImage || product.image).startsWith('/') ? '' : '/'}${selectedImage || product.image}`
                   }
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
+                {/* Zoom indicator */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                  <ZoomIn className="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
               </div>
-              <div className="grid grid-cols-4 gap-4">
-                {product.images.slice(0, 4).map((img, i) => (
-                  <div key={i} className="aspect-square rounded-lg overflow-hidden bg-muted border-2 border-primary/30">
+              {/* Thumbnail Images - Clickable */}
+              <div className="grid grid-cols-4 gap-2 sm:gap-4">
+                {product.images.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedImage(img)}
+                    className={`aspect-square rounded-lg overflow-hidden bg-muted border-2 transition-all ${
+                      (selectedImage || product.image) === img 
+                        ? 'border-primary ring-2 ring-primary/30' 
+                        : 'border-transparent hover:border-primary/50'
+                    }`}
+                  >
                     <img 
                       src={
                         img.startsWith('http://') || img.startsWith('https://')
@@ -204,7 +282,7 @@ const ProductDetail = () => {
                       alt={`${product.name} ${i+1}`} 
                       className="w-full h-full object-cover" 
                     />
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
