@@ -339,15 +339,15 @@ const Admin = () => {
 
   if (showLogin) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <Helmet>
           <title>Admin Login - Kashmiri Treasures</title>
         </Helmet>
-        <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-lg shadow-lg">
+        <div className="w-full max-w-md p-6 sm:p-8 space-y-6 bg-card rounded-lg shadow-lg">
           <div className="text-center space-y-2">
-            <Package className="h-16 w-16 mx-auto text-primary" />
-            <h1 className="text-4xl font-serif font-bold">Admin Panel</h1>
-            <p className="text-lg text-muted-foreground">Login to manage products</p>
+            <Package className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-primary" />
+            <h1 className="text-2xl sm:text-4xl font-serif font-bold">Admin Panel</h1>
+            <p className="text-base sm:text-lg text-muted-foreground">Login to manage products</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
@@ -392,34 +392,34 @@ const Admin = () => {
         <title>Admin Panel - Kashmiri Treasures</title>
       </Helmet>
       {/* Simple header for admin panel without navigation */}
-      <header className="border-b border-border bg-background">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b border-border bg-background sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-serif font-bold">Admin Panel</h1>
-              <p className="text-base text-muted-foreground">Kashmiri Treasures</p>
+              <h1 className="text-xl sm:text-3xl font-serif font-bold">Admin Panel</h1>
+              <p className="text-xs sm:text-base text-muted-foreground">Kashmiri Treasures</p>
             </div>
-            <Button variant="ghost" onClick={() => navigate("/")}>
+            <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="text-xs sm:text-sm">
               View Website
             </Button>
           </div>
         </div>
       </header>
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
+      <div className="container mx-auto px-4 py-4 sm:py-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-3xl font-serif font-bold mb-2">Product Management</h1>
-            <p className="text-muted-foreground">Manage your products</p>
+            <h1 className="text-xl sm:text-3xl font-serif font-bold mb-1 sm:mb-2">Product Management</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">Manage your products</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <Dialog open={showProductDialog} onOpenChange={setShowProductDialog}>
               <DialogTrigger asChild>
-                <Button onClick={resetForm}>
-                  <Plus className="h-4 w-4 mr-2" />
+                <Button onClick={resetForm} size="sm" className="flex-1 sm:flex-none text-xs sm:text-sm">
+                  <Plus className="h-4 w-4 mr-1 sm:mr-2" />
                   Add Product
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+              <DialogContent className="max-w-[95vw] sm:max-w-3xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
                 <DialogHeader>
                   <DialogTitle>
                     {editingProduct ? "Edit Product" : "Add New Product"}
@@ -431,9 +431,9 @@ const Admin = () => {
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Product Name *</Label>
+                      <Label htmlFor="name" className="text-sm">Product Name *</Label>
                       <Input
                         id="name"
                         value={formData.name}
@@ -441,10 +441,11 @@ const Admin = () => {
                           setFormData({ ...formData, name: e.target.value })
                         }
                         required
+                        className="text-sm"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="category">Category *</Label>
+                      <Label htmlFor="category" className="text-sm">Category *</Label>
                       <Select
                         value={formData.category}
                         onValueChange={(value) =>
@@ -455,7 +456,7 @@ const Admin = () => {
                         }
                         required
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="text-sm">
                           <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent>
@@ -470,7 +471,7 @@ const Admin = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description">Description *</Label>
+                    <Label htmlFor="description" className="text-sm">Description *</Label>
                     <Textarea
                       id="description"
                       value={formData.description}
@@ -478,13 +479,14 @@ const Admin = () => {
                         setFormData({ ...formData, description: e.target.value })
                       }
                       required
-                      rows={4}
+                      rows={3}
+                      className="text-sm"
                     />
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="price">Price (₹) *</Label>
+                      <Label htmlFor="price" className="text-sm">Price (₹) *</Label>
                       <Input
                         id="price"
                         type="number"
@@ -494,10 +496,11 @@ const Admin = () => {
                           setFormData({ ...formData, price: e.target.value })
                         }
                         required
+                        className="text-sm"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="originalPrice">Original Price (₹)</Label>
+                      <Label htmlFor="originalPrice" className="text-sm">Original Price</Label>
                       <Input
                         id="originalPrice"
                         type="number"
@@ -509,10 +512,11 @@ const Admin = () => {
                             originalPrice: e.target.value,
                           })
                         }
+                        className="text-sm"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="rating">Rating</Label>
+                    <div className="space-y-2 col-span-2 sm:col-span-1">
+                      <Label htmlFor="rating" className="text-sm">Rating</Label>
                       <Input
                         id="rating"
                         type="number"
@@ -523,13 +527,14 @@ const Admin = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, rating: e.target.value })
                         }
+                        className="text-sm"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="reviews">Reviews Count</Label>
+                      <Label htmlFor="reviews" className="text-sm">Reviews Count</Label>
                       <Input
                         id="reviews"
                         type="number"
@@ -537,6 +542,7 @@ const Admin = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, reviews: e.target.value })
                         }
+                        className="text-sm"
                       />
                     </div>
                     <div className="space-y-2 flex items-end">
@@ -551,15 +557,15 @@ const Admin = () => {
                               inStock: e.target.checked,
                             })
                           }
-                          className="h-4 w-4"
+                          className="h-5 w-5"
                         />
-                        <Label htmlFor="inStock">In Stock</Label>
+                        <Label htmlFor="inStock" className="text-sm">In Stock</Label>
                       </div>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="artisanStory">Artisan Story</Label>
+                    <Label htmlFor="artisanStory" className="text-sm">Artisan Story</Label>
                     <Textarea
                       id="artisanStory"
                       value={formData.artisanStory}
@@ -569,13 +575,14 @@ const Admin = () => {
                           artisanStory: e.target.value,
                         })
                       }
-                      rows={3}
+                      rows={2}
+                      className="text-sm"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="variants">
-                      Variants (JSON format, e.g. [&#123;"name": "Color", "options": ["Red", "Blue"]&#125;])
+                    <Label htmlFor="variants" className="text-sm">
+                      Variants (JSON - optional)
                     </Label>
                     <Textarea
                       id="variants"
@@ -583,14 +590,15 @@ const Admin = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, variants: e.target.value })
                       }
-                      rows={3}
+                      rows={2}
                       placeholder='[{"name": "Color", "options": ["Red", "Blue"]}]'
+                      className="text-sm"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="details">
-                      Details (JSON format, e.g. &#123;"material": "Cotton", "origin": "Kashmir"&#125;)
+                    <Label htmlFor="details" className="text-sm">
+                      Details (JSON - optional)
                     </Label>
                     <Textarea
                       id="details"
@@ -598,13 +606,14 @@ const Admin = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, details: e.target.value })
                       }
-                      rows={3}
+                      rows={2}
                       placeholder='{"material": "Cotton", "origin": "Kashmir"}'
+                      className="text-sm"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="mainImage">
+                    <Label htmlFor="mainImage" className="text-sm">
                       Main Image {!editingProduct && "*"}
                     </Label>
                     <Input
@@ -613,9 +622,10 @@ const Admin = () => {
                       accept="image/*"
                       onChange={handleImageChange}
                       required={!editingProduct}
+                      className="text-sm"
                     />
                     {imagePreview && (
-                      <div className="relative w-32 h-32 mt-2">
+                      <div className="relative w-24 h-24 sm:w-32 sm:h-32 mt-2">
                         <img
                           src={imagePreview}
                           alt="Preview"
@@ -625,7 +635,7 @@ const Admin = () => {
                           type="button"
                           variant="destructive"
                           size="icon"
-                          className="absolute top-0 right-0"
+                          className="absolute top-0 right-0 h-6 w-6"
                           onClick={() => {
                             setMainImage(null);
                             setImagePreview("");
@@ -638,18 +648,19 @@ const Admin = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="additionalImages">Additional Images</Label>
+                    <Label htmlFor="additionalImages" className="text-sm">Additional Images</Label>
                     <Input
                       id="additionalImages"
                       type="file"
                       accept="image/*"
                       multiple
                       onChange={handleAdditionalImagesChange}
+                      className="text-sm"
                     />
                     {additionalPreviews.length > 0 && (
                       <div className="flex gap-2 mt-2 flex-wrap">
                         {additionalPreviews.map((preview, idx) => (
-                          <div key={idx} className="relative w-24 h-24">
+                          <div key={idx} className="relative w-16 h-16 sm:w-20 sm:h-20">
                             <img
                               src={preview}
                               alt={`Preview ${idx + 1}`}
@@ -659,7 +670,7 @@ const Admin = () => {
                               type="button"
                               variant="destructive"
                               size="icon"
-                              className="absolute top-0 right-0 h-6 w-6"
+                              className="absolute -top-1 -right-1 h-5 w-5"
                               onClick={() => {
                                 const newPreviews = [...additionalPreviews];
                                 const newImages = [...additionalImages];
@@ -677,7 +688,7 @@ const Admin = () => {
                     )}
                   </div>
 
-                  <div className="flex justify-end gap-2">
+                  <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-2">
                     <Button
                       type="button"
                       variant="outline"
@@ -685,10 +696,11 @@ const Admin = () => {
                         setShowProductDialog(false);
                         resetForm();
                       }}
+                      className="w-full sm:w-auto"
                     >
                       Cancel
                     </Button>
-                    <Button type="submit" disabled={loading}>
+                    <Button type="submit" disabled={loading} className="w-full sm:w-auto">
                       {loading
                         ? "Saving..."
                         : editingProduct
@@ -699,8 +711,8 @@ const Admin = () => {
                 </form>
               </DialogContent>
             </Dialog>
-            <Button variant="outline" onClick={handleLogout}>
-              <LogOut className="h-4 w-4 mr-2" />
+            <Button variant="outline" onClick={handleLogout} size="sm" className="flex-1 sm:flex-none text-xs sm:text-sm">
+              <LogOut className="h-4 w-4 mr-1 sm:mr-2" />
               Logout
             </Button>
           </div>
@@ -710,32 +722,78 @@ const Admin = () => {
           <div className="text-center py-12">
             <p className="text-muted-foreground">Loading products...</p>
           </div>
+        ) : products.length === 0 ? (
+          <div className="border rounded-lg p-8 text-center">
+            <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <p className="text-muted-foreground">No products found</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Click "Add Product" to create your first product
+            </p>
+          </div>
         ) : (
-          <div className="border rounded-lg">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Stock</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {products.length === 0 ? (
+          <>
+            {/* Mobile Card View */}
+            <div className="block sm:hidden space-y-3">
+              {products.map((product) => (
+                <div key={product.id} className="border rounded-lg p-3 bg-card">
+                  <div className="flex gap-3">
+                    <img
+                      src={
+                        product.image.startsWith('http://') || product.image.startsWith('https://')
+                          ? product.image
+                          : `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${product.image.startsWith('/') ? '' : '/'}${product.image}`
+                      }
+                      alt={product.name}
+                      className="w-20 h-20 object-cover rounded flex-shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-sm truncate">{product.name}</h3>
+                      <p className="text-xs text-muted-foreground capitalize">{product.category}</p>
+                      <p className="text-sm font-semibold text-primary mt-1">₹{product.price.toLocaleString()}</p>
+                      <span className={`text-xs ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
+                        {product.inStock ? 'In Stock' : 'Out of Stock'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 mt-3 pt-3 border-t">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 text-xs"
+                      onClick={() => openEditDialog(product)}
+                    >
+                      <Edit className="h-3 w-3 mr-1" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="flex-1 text-xs"
+                      onClick={() => setDeleteProductId(product.id)}
+                    >
+                      <Trash2 className="h-3 w-3 mr-1" />
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden sm:block border rounded-lg overflow-x-auto">
+              <Table>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-12">
-                      <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                      <p className="text-muted-foreground">No products found</p>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Click "Add Product" to create your first product
-                      </p>
-                    </TableCell>
+                    <TableHead>Image</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Stock</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ) : (
-                  products.map((product) => (
+                </TableHeader>
+                <TableBody>
+                  {products.map((product) => (
                     <TableRow key={product.id}>
                       <TableCell>
                         <img
@@ -779,11 +837,11 @@ const Admin = () => {
                         </div>
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
       </div>
 

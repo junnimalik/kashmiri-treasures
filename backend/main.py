@@ -186,8 +186,11 @@ async def create_product(
     image_paths = [main_image_path]
     if additional_images:
         for img in additional_images:
-            img_path = save_uploaded_file(img, product_id)
-            image_paths.append(img_path)
+            # Skip empty files (browsers may send empty file entries)
+            if img and img.filename and img.size > 0:
+                img_path = save_uploaded_file(img, product_id)
+                image_paths.append(img_path)
+                logger.info(f"Saved additional image: {img_path}")
     
     # Parse and serialize JSON fields (store as JSON strings in Text columns)
     variants_data = None
@@ -358,16 +361,23 @@ async def update_product(
     if additional_images:
         new_image_paths = []
         for img in additional_images:
-            img_path = save_uploaded_file(img, product_id)
-            new_image_paths.append(img_path)
-        # Parse existing images and combine
-        existing_images = []
-        if product.images:
-            try:
-                existing_images = json.loads(product.images) if isinstance(product.images, str) else product.images
-            except:
-                existing_images = []
-        product.images = json.dumps([product.image] + new_image_paths)
+            # Skip empty files (browsers may send empty file entries)
+            if img and img.filename and img.size > 0:
+                img_path = save_uploaded_file(img, product_id)
+                new_image_paths.append(img_path)
+                logger.info(f"Saved additional image (update): {img_path}")
+        
+        if new_image_paths:
+            # Parse existing images and combine - keep existing additional images too
+            existing_images = []
+            if product.images:
+                try:
+                    existing_images = json.loads(product.images) if isinstance(product.images, str) else product.images
+                except:
+                    existing_images = []
+            # Combine main image + new images + existing additional images (excluding main)
+            all_images = [product.image] + new_image_paths + (existing_images[1:] if len(existing_images) > 1 else [])
+            product.images = json.dumps(all_images)
     
     db.commit()
     db.refresh(product)
